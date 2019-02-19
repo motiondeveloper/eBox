@@ -9,16 +9,12 @@
                 var originalPosition = centerToCornerPosition(getPosition(), anchorPoint);
                 boxPoints = sizeToPoints(size);
                 boxPoints = movePointsCenter(boxPoints, cornerToCenterPosition(originalPosition, anchorPoint));
-            } else {
-                throw new Error('eBox: Invalid box size');
             }
         }
 
         this.setPosition = function(position, anchorPoint) {
             if (positionIsValid(position)) {
                 boxPoints = movePointsCenter(boxPoints, cornerToCenterPosition(position, anchorPoint));
-            } else {
-                throw new Error('eBox: Invalid box position')
             }
         }
 
@@ -31,8 +27,6 @@
                 var scaledSize = originalSize * (scale / 100);
                 scaledPoints = sizeToPoints(scaledSize);
                 scaledPoints = movePointsCenter(scaledPoints, cornerToCenterPosition(originalPosition, anchorPoint));
-            } else {
-                throw new Error('eBox: Invalid box scale')
             }
         }
 
