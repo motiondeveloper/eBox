@@ -30,7 +30,7 @@
             }
         }
 
-        this.showBox = function() {
+        this.show = function() {
             return pointsToPath(scaledPoints)
         }
 
