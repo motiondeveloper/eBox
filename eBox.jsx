@@ -10,7 +10,7 @@
                 boxPoints = sizeToPoints(size);
                 boxPoints = movePointsCenter(boxPoints, cornerToCenterPosition(originalPosition, anchorPoint));
             } else {
-                throw new Error('Invalid box size');
+                throw new Error('eBox: Invalid box size');
             }
         }
 
@@ -18,18 +18,22 @@
             if (positionIsValid(position)) {
                 boxPoints = movePointsCenter(boxPoints, cornerToCenterPosition(position, anchorPoint));
             } else {
-                throw new Error('Invalid box position')
+                throw new Error('eBox: Invalid box position')
             }
         }
 
         var scaledPoints = boxPoints.slice(0);
 
         this.setScale = function(scale, anchorPoint) {
-            var originalPosition = centerToCornerPosition(getPosition(), anchorPoint);
-            var originalSize = getSize();
-            var scaledSize = originalSize * (scale / 100);
-            scaledPoints = sizeToPoints(scaledSize);
-            scaledPoints = movePointsCenter(scaledPoints, cornerToCenterPosition(originalPosition, anchorPoint));
+            if (scaleIsValid(scale)) {
+                var originalPosition = centerToCornerPosition(getPosition(), anchorPoint);
+                var originalSize = getSize();
+                var scaledSize = originalSize * (scale / 100);
+                scaledPoints = sizeToPoints(scaledSize);
+                scaledPoints = movePointsCenter(scaledPoints, cornerToCenterPosition(originalPosition, anchorPoint));
+            } else {
+                throw new Error('eBox: Invalid box scale')
+            }
         }
 
         this.showBox = function() {
@@ -134,15 +138,15 @@
         }
 
         function sizeIsValid(size) {
-            if(size.length === 2) {
-                return true;
-            } else {
-                return false;
-            }
+            return size.length === 2;
         }
 
         function positionIsValid(position) {
-            return sizeIsValid(position);
+            return position.length === 2;
+        }
+
+        function scaleIsValid(scale) {
+            return scale.length === 2;
         }
     }
 }
