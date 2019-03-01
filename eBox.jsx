@@ -5,7 +5,7 @@
 
         this.setSize = function(size) {
             if (sizeIsValid(size)) {
-                var originalPosition = getPosition();
+                var originalPosition = getPosition(boxPoints);
                 var tempPoints = sizeToPoints(size);
                 boxPoints = movePointsCenter(tempPoints, originalPosition);
             }
@@ -13,20 +13,18 @@
 
         this.setPosition = function(position, anchorPoint) {
             if (positionIsValid(position)) {
-                var tempPoints = boxPoints.slice(0);
-                boxPoints = movePointsCenter(tempPoints, cornerToCenterPosition(position, anchorPoint));
+                var tempPoints = copyArray(boxPoints);
+                boxPoints = movePointsCenter(tempPoints, cornerToCenterPosition(position, anchorPoint, tempPoints));
             }
         }
 
-        var scaledPoints = boxPoints.slice(0);
-
         this.setScale = function(scale, anchorPoint) {
             if (scaleIsValid(scale)) {
-                var originalPosition = centerToCornerPosition(getPosition(), anchorPoint);
-                var originalSize = getSize();
-                var scaledSize = originalSize * (scale / 100);
-                scaledPoints = sizeToPoints(scaledSize);
-                scaledPoints = movePointsCenter(scaledPoints, cornerToCenterPosition(originalPosition, anchorPoint));
+                var originalSize = getSize(boxPoints);
+                var originalPosition = getPosition(boxPoints);
+                var scaledSize = [originalSize[0] * (scale[0] / 100), originalSize[1] * (scale[1] / 100)];
+                var scaledPoints = sizeToPoints(scaledSize);
+                boxPoints = movePointsCenter(scaledPoints, originalPosition);
             }
         }
 
@@ -34,31 +32,31 @@
             return pointsToPath(boxPoints);
         }
 
-        function getSize() {
-            return [boxPoints[1][0] - boxPoints[0][0], boxPoints[2][1] - boxPoints[1][1]];
+        function getSize(points) {
+            var size = [points[1][0] - points[0][0], points[2][1] - points[1][1]];
+            return size;
         }
 
-        function getPosition() {
-            var boxSize = getSize()
-            return boxPoints[0] + boxSize/2;
+        function getPosition(points) {
+            var boxSize = getSize(points)
+            return points[0] + boxSize/2;
         }
 
         function movePointsCenter(points, position) {
-
-            var boxPosition = getPosition();
-            var positionDelta = boxPosition + position;
+            var pointSize = getSize(points);
+            var tempPoints = sizeToPoints(pointSize);
 
             for (var i=0; i<boxPoints.length; i++) {
-                points[i] += positionDelta;
+                tempPoints[i] += position;
             }
             
-            return points;
+            return tempPoints;
         }
 
-        function cornerToCenterPosition(position, anchorPoint) {
+        function cornerToCenterPosition(position, anchorPoint, points) {
 
             var centerPosition = [];
-            var boxSize = getSize();
+            var boxSize = getSize(points);
 
             switch (anchorPoint) {
                 case 'center':
@@ -84,10 +82,10 @@
             
         }
 
-        function centerToCornerPosition(center, anchorPoint) {
+        function centerToCornerPosition(center, anchorPoint, points) {
 
             var cornerPosition = [];
-            var boxSize = getSize();
+            var boxSize = getSize(points);
 
             switch (anchorPoint) {
                 case 'center':
@@ -130,6 +128,14 @@
             }
             
             return createPath(pathPoints, [], [], true);
+        }
+
+        function copyArray(originalArray) {
+            var copyArray = [];
+            for (var i = 0; i < originalArray.length; i++) {
+                copyArray[i] = originalArray[i].slice(0);
+            }
+            return copyArray;
         }
 
         function sizeIsValid(size) {
