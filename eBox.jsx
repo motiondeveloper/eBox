@@ -1,20 +1,20 @@
-// @ts-check
 {
     "Box": function() {
 
-        var boxPoints = [[0,0], [100,0], [50,100], [50,0]];
+        var boxPoints = [[0,0], [0,0], [0,0], [0,0]];
 
-        this.setSize = function(size, anchorPoint) {
+        this.setSize = function(size) {
             if (sizeIsValid(size)) {
-                var originalPosition = centerToCornerPosition(getPosition(), anchorPoint);
-                boxPoints = sizeToPoints(size);
-                boxPoints = movePointsCenter(boxPoints, cornerToCenterPosition(originalPosition, anchorPoint));
+                var originalPosition = getPosition();
+                var tempPoints = sizeToPoints(size);
+                boxPoints = movePointsCenter(tempPoints, originalPosition);
             }
         }
 
         this.setPosition = function(position, anchorPoint) {
             if (positionIsValid(position)) {
-                boxPoints = movePointsCenter(boxPoints, cornerToCenterPosition(position, anchorPoint));
+                var tempPoints = boxPoints.slice(0);
+                boxPoints = movePointsCenter(tempPoints, cornerToCenterPosition(position, anchorPoint));
             }
         }
 
@@ -31,21 +31,22 @@
         }
 
         this.show = function() {
-            return pointsToPath(scaledPoints)
+            return pointsToPath(boxPoints);
         }
 
         function getSize() {
-            return [boxPoints[1][0] - boxPoints[0][0], boxPoints[1][1] - boxPoints[0][1]];
+            return [boxPoints[1][0] - boxPoints[0][0], boxPoints[2][1] - boxPoints[1][1]];
         }
 
         function getPosition() {
-            return boxPoints[0] + getSize()/2;
+            var boxSize = getSize()
+            return boxPoints[0] + boxSize/2;
         }
 
         function movePointsCenter(points, position) {
 
             var boxPosition = getPosition();
-            var positionDelta = boxPosition - position;
+            var positionDelta = boxPosition + position;
 
             for (var i=0; i<boxPoints.length; i++) {
                 points[i] += positionDelta;
@@ -114,10 +115,10 @@
 
         function sizeToPoints(size) {
             var points = [
-                [-size[0]/2, size[1]/2],
-                [size[0]/2, size[1]/2],
+                [-size[0]/2, -size[1]/2],
                 [size[0]/2, -size[1]/2],
-                [-size[0]/2, -size[1]/2]
+                [size[0]/2, size[1]/2],
+                [-size[0]/2, size[1]/2]
             ];
             return points;
         }
@@ -128,7 +129,7 @@
                 pathPoints.push(fromCompToSurface(points[i]));
             }
             
-            return createPath(pathPoints, [], [], closed);
+            return createPath(pathPoints, [], [], true);
         }
 
         function sizeIsValid(size) {
