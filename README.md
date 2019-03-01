@@ -4,6 +4,8 @@ eBox a system for creating rectangles in After Effects with intuitive controls f
 
 Its purpose is to speed up the creation of After Effects templates and other automated work.
 
+**Please note eBox is not currently working!**
+
 ## Usage
 
 1. **Download and import [`eBox.jsx`](https://github.com/motiondeveloper/eBox/raw/master/eBox.jsx) into your After Effects project**
@@ -96,9 +98,10 @@ myBox.show()
 
 ## To Do
 
-- Actualy try the code in After Effects
-- Write setScale function
-- Add edge center anchor points (e.g. topCenter, leftCenter)
+- [x] Actually try the code in After Effects
+- [x] Write setScale function
+- [ ] Fix setScale anchor points
+- [ ] Add edge center anchor points (e.g. topCenter, leftCenter)
 
 ## License
 
