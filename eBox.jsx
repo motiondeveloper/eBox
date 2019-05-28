@@ -1,28 +1,26 @@
 {
-    "createBox": function(initialPoints) {
+    "createBox": function(layer, initialPoints = [[0,0], [0,0], [0,0], [0,0]]) {
 
         let boxPoints = initialPoints;
 
-        setSize = (size) => {
+        const setSize = (size) => {
             const originalPosition = getPosition(boxPoints);
             const tempPoints = sizeToPoints(size);
             boxPoints = movePointsCenter(tempPoints, originalPosition);
         }
 
-        setPosition = (position, anchorPoint) => {
-            const tempPoints = Array.from(boxPoints);
+        const setPosition = (position, anchorPoint) => {
+            const tempPoints = [...boxPoints];
             boxPoints = movePointsCenter(tempPoints, cornerToCenterPosition(position, anchorPoint, tempPoints));
         }
 
-        setScale = (scale, anchorPoint) => {
+        const setScale = (scale, anchorPoint) => {
             const originalSize = getSize(boxPoints);
             const originalPosition = getPosition(boxPoints);
             const scaledSize = [originalSize[0] * (scale[0] / 100), originalSize[1] * (scale[1] / 100)];
             const scaledPoints = sizeToPoints(scaledSize);
             boxPoints = movePointsCenter(scaledPoints, originalPosition);
         }
-
-        show = () => pointsToPath(boxPoints);
 
         const getSize = (points) => {
             return [points[1][0] - points[0][0], points[2][1] - points[1][1]];
@@ -106,15 +104,17 @@
         }
 
         function pointsToPath(points) {
-            const pathPoints = points.map(point => fromCompToSurface(point));
-            return createPath(pathPoints, [], [], true);
+            const pathPoints = points.map(point => layer.fromCompToSurface(point));
+            return pathPoints
+;
         }
 
         const interface = {
             setSize,
             setPosition,
             setScale,
-            show,
+            getSize,
+            show: pointsToPath(boxPoints),
         }
 
         return interface;
