@@ -31,8 +31,12 @@
       return boxPath;
     }
 
-    function scaleBox(boxProps, scale = [100, 100]) {
-
+    function scaleBox(boxProps, scale = [100, 100], anchor) {
+      const scaledSize = [boxProps.size[0] * scale[0], boxProps.scale * scale[1]];
+      return {
+        ...boxProps,
+        size: scaledSize,
+      }
     }
 
     const box = {
@@ -43,7 +47,6 @@
     }
 
     box.centerPosition = positionToCenter(box.position, box.size, box.anchor);
-    
-    return createPathFromBoxProps(box);
+    box.path = createPathFromBoxProps(box);
   }
 }
