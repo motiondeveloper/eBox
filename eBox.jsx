@@ -92,7 +92,7 @@
       isClosed = true,
     } = boxProps;
 
-    const centerPosition = positionToCenter(box.position, box.size, box.anchor);
+    const centerPosition = positionToCenter(position, size, anchor);
 
     this.points = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
     this.setScale = scalePoints();
