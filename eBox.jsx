@@ -1,153 +1,123 @@
 {
-    "Box": function() {
+  "createBox": function(boxProps = {}, layer = thisLayer, property = thisProperty) {
 
-        var boxPoints = [[0,0], [0,0], [0,0], [0,0]];
+    const pointOrder = ['topLeft', 'topRight', 'bottomRight', 'bottomLeft'];
 
-        this.setSize = function(size) {
-            if (sizeIsValid(size)) {
-                var originalPosition = getPosition(boxPoints);
-                var tempPoints = sizeToPoints(size);
-                boxPoints = movePointsCenter(tempPoints, originalPosition);
-            }
-        }
+    const positionToCenter = (position, size, anchor) => {
 
-        this.setPosition = function(position, anchorPoint) {
-            if (positionIsValid(position)) {
-                var tempPoints = copyArray(boxPoints);
-                boxPoints = movePointsCenter(tempPoints, cornerToCenterPosition(position, anchorPoint, tempPoints));
-            }
-        }
+      const positionCalculations = {
+        'center': () => position,
+        'topLeft': () => [position[0] + size[0]/2, position[1] + size[1]/2],
+        'topRight': () => [position[0] -size[0]/2, position[1] + size[1]/2],
+        'bottomLeft': () => [position[0] + size[0]/2, position[1] - size[1]/2],
+        'bottomRight': () => [position[0] - size[0]/2, position[1] - size[1]/2],
+      }
 
-        this.setScale = function(scale, anchorPoint) {
-            if (scaleIsValid(scale)) {
-                var originalSize = getSize(boxPoints);
-                var originalPosition = getPosition(boxPoints);
-                var scaledSize = [originalSize[0] * (scale[0] / 100), originalSize[1] * (scale[1] / 100)];
-                var scaledPoints = sizeToPoints(scaledSize);
-                boxPoints = movePointsCenter(scaledPoints, originalPosition);
-            }
-        }
-
-        this.show = function() {
-            return pointsToPath(boxPoints);
-        }
-
-        function getSize(points) {
-            var size = [points[1][0] - points[0][0], points[2][1] - points[1][1]];
-            return size;
-        }
-
-        function getPosition(points) {
-            var boxSize = getSize(points)
-            return points[0] + boxSize/2;
-        }
-
-        function movePointsCenter(points, position) {
-            var pointSize = getSize(points);
-            var tempPoints = sizeToPoints(pointSize);
-
-            for (var i=0; i<boxPoints.length; i++) {
-                tempPoints[i] += position;
-            }
-            
-            return tempPoints;
-        }
-
-        function cornerToCenterPosition(position, anchorPoint, points) {
-
-            var centerPosition = [];
-            var boxSize = getSize(points);
-
-            switch (anchorPoint) {
-                case 'center':
-                    centerPosition = position;
-                    break;
-                case 'topLeft':
-                    centerPosition = position + [boxSize[0]/2, boxSize[1]/2];
-                    break;
-                case 'topRight':
-                    centerPosition = position + [-boxSize[0]/2, boxSize[1]/2];
-                    break;
-                case 'bottomLeft':
-                    centerPosition = position + [boxSize[0]/2, -boxSize[1]/2];
-                    break;
-                case 'bottomRight':
-                    centerPosition = position + [-boxSize[0]/2, -boxSize[1]/2];
-                    break;
-                default:
-                    break;
-            }
-
-            return centerPosition;
-            
-        }
-
-        function centerToCornerPosition(center, anchorPoint, points) {
-
-            var cornerPosition = [];
-            var boxSize = getSize(points);
-
-            switch (anchorPoint) {
-                case 'center':
-                    cornerPosition = center;
-                    break;
-                case 'topLeft':
-                    cornerPosition = center + [-boxSize[0]/2, -boxSize[1]/2];
-                    break;
-                case 'topRight':
-                    cornerPosition = center + [boxSize[0]/2, -boxSize[1]/2];
-                    break;
-                case 'bottomLeft':
-                    cornerPosition = center + [-boxSize[0]/2, boxSize[1]/2];
-                    break;
-                case 'bottomRight':
-                    cornerPosition = center + [boxSize[0]/2, boxSize[1]/2];
-                    break;
-                default:
-                    break;
-            }
-
-            return cornerPosition;
-            
-        }
-
-        function sizeToPoints(size) {
-            var points = [
-                [-size[0]/2, -size[1]/2],
-                [size[0]/2, -size[1]/2],
-                [size[0]/2, size[1]/2],
-                [-size[0]/2, size[1]/2]
-            ];
-            return points;
-        }
-
-        function pointsToPath(points) {
-            var pathPoints = [];
-            for(i=0; i<points.length; i++) {
-                pathPoints.push(fromCompToSurface(points[i]));
-            }
-            
-            return createPath(pathPoints, [], [], true);
-        }
-
-        function copyArray(originalArray) {
-            var copyArray = [];
-            for (var i = 0; i < originalArray.length; i++) {
-                copyArray[i] = originalArray[i].slice(0);
-            }
-            return copyArray;
-        }
-
-        function sizeIsValid(size) {
-            return size.length === 2;
-        }
-
-        function positionIsValid(position) {
-            return position.length === 2;
-        }
-
-        function scaleIsValid(scale) {
-            return scale.length === 2;
-        }
+      return positionCalculations[anchor]();
     }
+
+    const sizeToPoints = (size) => {
+      return [
+        [-size[0]/2, -size[1]/2],
+        [size[0]/2, -size[1]/2],
+        [size[0]/2, size[1]/2],
+        [-size[0]/2, size[1]/2]
+      ];
+    }
+    const movePoints = (points, oldPosition, newPosition) => {
+      const positionDelta = newPosition.map((dimension, dimensionIndex) => {
+        return dimension - oldPosition[dimensionIndex];
+      });
+
+      return points.map(
+        (point) => {
+          return point.map(
+            (dimension, dimensionIndex) => {
+              return dimension + positionDelta[dimensionIndex];
+          });
+        }
+      );
+    };
+    
+    const pointsToComp = points => points.map(point => layer.fromCompToSurface(point));
+    const pointsToPath = (points, isClosed) => property.createPath(points, [], [], isClosed);
+
+    function createPointsFromBoxProps(boxProps) {
+      const points = sizeToPoints(boxProps.size);
+      const centeredPoints = movePoints(points, [0, 0], boxProps.centerPosition);
+      const compPositionPoints = pointsToComp(centeredPoints);
+
+      return compPositionPoints;
+    }
+
+    function scalePoints(scale = [100, 100], anchor) {
+
+      // Remap scale to [0..1]
+      const normalizedScale = scale.map(scale => scale / 100);
+      
+      // Get index of anchor point
+      const anchorPointIndex = pointOrder.indexOf(anchor);
+      const anchorPoint = boxPoints[anchorPointIndex];
+      
+      // Calculate distance from anchor point
+      const pointDeltas = boxPoints.map(
+        (point) => {
+          return point.map(
+            (dimension, dimensionIndex) => {
+              return dimension - anchorPoint[dimensionIndex];
+            }
+          );
+        }
+      );
+
+      // Scale the point deltas according to input scale
+      const scaledPointDeltas = pointDeltas.map(
+        (point) => {
+          return point.map(
+            (dimension, dimensionIndex) => {
+              return dimension * normalizedScale[dimensionIndex];
+            }
+          );
+        }
+      );
+      // Get final points by adding scaled deltas to anchor point
+      // THIS DOESN'T WORK????
+      boxPoints = boxPoints.map(
+
+        (point, pointIndex) => {
+
+          if (pointIndex !== anchorPointIndex) {
+            // If not the anchor point
+            // Create the point from the scaledPointDelta
+            return point.map(
+              (_pointDimension, dimensionIndex) => {
+                return anchorPoint[dimensionIndex] + scaledPointDeltas[pointIndex][dimensionIndex];
+              }
+            );
+          } else {
+            // If the anchor point
+            // Return as is
+            return point;
+          }
+        }
+      );
+    }
+
+    // Destructuring boxProps, with defaults
+    const {
+      size = [800, 200],
+      position = [960, 540],
+      anchor = 'bottomRight',
+      isClosed = true,
+    } = boxProps;
+
+    const centerPosition = positionToCenter(position, size, anchor);
+
+    let boxPoints = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
+    
+    return {
+      setScale: scalePoints,
+      path: pointsToPath(boxPoints, isClosed),
+    }
+  }
 }
