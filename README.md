@@ -48,7 +48,7 @@ You can animate each of the box properties with the expression animation tool, *
     const myBox = eBox.createBox({
         size: [800, 200],
         position: [960, 540],
-        anchor: 'center',
+        anchor: 'topLeft',
         isClosed: true,
     });
     ```
@@ -71,7 +71,7 @@ You can animate each of the box properties with the expression animation tool, *
     This returns the path for the box:
 
     ```javascript
-    eBoxName.show();
+    eBoxName.path;
     ````
 
 [Back To Top ↑]
