@@ -57,10 +57,10 @@
       
       // Get index of anchor point
       const anchorPointIndex = pointOrder.indexOf(anchor);
-      const anchorPoint = boxPoints[anchorPointIndex];
+      const anchorPoint = this.boxPoints[anchorPointIndex];
       
       // Calculate distance from anchor point
-      const pointDeltas = boxPoints.map(
+      const pointDeltas = this.boxPoints.map(
         (point) => {
           return point.map(
             (dimension, dimensionIndex) => {
@@ -82,7 +82,7 @@
       );
       // Get final points by adding scaled deltas to anchor point
       // THIS DOESN'T WORK????
-      boxPoints = boxPoints.map(
+      this.boxPoints = this.boxPoints.map(
 
         (point, pointIndex) => {
 
@@ -113,11 +113,11 @@
 
     const centerPosition = positionToCenter(position, size, anchor);
 
-    let boxPoints = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
+    this.boxPoints = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
     
     return {
       setScale: scalePoints,
-      path: pointsToPath(boxPoints, isClosed),
+      path: pointsToPath(this.boxPoints, isClosed),
     }
   }
 }
