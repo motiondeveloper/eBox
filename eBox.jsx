@@ -37,31 +37,30 @@
 
       // Remap scale to [0..1]
       const normalizedScale = scale.map(scale => scale / 100);
-      // Set which point won't be scaled
-      const staticPointNum = pointOrder.indexOf[anchor];
+      // Get index of anchor point
+      const staticPointIndex = pointOrder.indexOf(anchor);
       // Calculate distance from anchor point
       const pointDeltas;
-
-      const pointScales = [
-        [1, 1],
-        [1, 1],
-        [1, 1],
-        [1, 1],
-      ];
 
       // Scale the point deltas according to input scale
       const scaledPointDeltas;
 
       // Get final points by adding scaled deltas to anchor point
-
-      // Return points multiplied by relevant pointScale
       this.points = this.points.map(
         (point, pointIndex) => {
-          return point.map(
-            (pointDimension, pointDimensionIndex) => {
-              return pointDimension * pointScales[pointIndex][pointDimensionIndex];
-            }
-          )
+          if (pointIndex !== staticPointIndex) {
+            // If not the anchor point
+            // Create the point from the scaledPointDelta
+            return this.points[staticPointIndex].map(
+              (pointDimension, dimensionIndex) => {
+                return pointDimension + scaledPointDeltas[pointIndex][dimensionIndex];
+              }
+            )
+          } else {
+            // If the anchor point
+            // Return as is
+            return point;
+          }
         }
       );
     }
