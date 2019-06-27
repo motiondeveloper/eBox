@@ -50,7 +50,7 @@
       return compPositionPoints;
     }
 
-    function scalePoints(scale = [100, 100], anchor) {
+    const scalePoints = function (scale = [100, 100], anchor) {
 
       // Remap scale to [0..1]
       const normalizedScale = scale.map(scale => scale / 100);
