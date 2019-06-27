@@ -82,7 +82,7 @@ An example setup of an eBox setup:
 
 ```javascript
 // Import eBox library
-const eBox = footage("Box.jsx").sourceData;
+const eBox = footage("eBox.jsx").sourceData;
 
 // Create new eBox
 const myBox = eBox.createBox({
