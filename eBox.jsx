@@ -80,8 +80,8 @@
           );
         }
       );
-
       // Get final points by adding scaled deltas to anchor point
+      // THIS DOESN'T WORK????
       boxPoints = boxPoints.map(
 
         (point, pointIndex) => {
