@@ -39,7 +39,7 @@
       );
     };
     
-    const pointsToComp = points => points.map(point => layer.toComp(point));
+    const pointsToComp = points => points.map(point => layer.fromCompToSurface(point));
     const pointsToPath = (points, isClosed) => property.createPath(points, [], [], isClosed);
 
     function createPointsFromBoxProps(boxProps) {
@@ -57,10 +57,10 @@
       
       // Get index of anchor point
       const anchorPointIndex = pointOrder.indexOf(anchor);
-      const anchorPoint = this.points[anchorPointIndex];
+      const anchorPoint = boxPoints[anchorPointIndex];
       
       // Calculate distance from anchor point
-      const pointDeltas = this.points.map(
+      const pointDeltas = boxPoints.map(
         (point) => {
           return point.map(
             (dimension, dimensionIndex) => {
@@ -82,16 +82,18 @@
       );
 
       // Get final points by adding scaled deltas to anchor point
-      this.points = this.points.map(
+      boxPoints = boxPoints.map(
+
         (point, pointIndex) => {
+
           if (pointIndex !== anchorPointIndex) {
             // If not the anchor point
             // Create the point from the scaledPointDelta
-            return this.points[anchorPointIndex].map(
-              (pointDimension, dimensionIndex) => {
-                return pointDimension + scaledPointDeltas[pointIndex][dimensionIndex];
+            return point.map(
+              (_pointDimension, dimensionIndex) => {
+                return anchorPoint[dimensionIndex] + scaledPointDeltas[pointIndex][dimensionIndex];
               }
-            )
+            );
           } else {
             // If the anchor point
             // Return as is
@@ -111,8 +113,11 @@
 
     const centerPosition = positionToCenter(position, size, anchor);
 
-    this.points = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
-    this.setScale = scalePoints;
-    this.path = pointsToPath(this.points, isClosed);
+    let boxPoints = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
+    
+    return {
+      setScale: scalePoints,
+      path: pointsToPath(boxPoints, isClosed),
+    }
   }
 }
