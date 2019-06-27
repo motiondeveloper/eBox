@@ -85,7 +85,7 @@ An example setup of an eBox setup:
 const eBox = footage("eBox.jsx").sourceData;
 
 // Create new eBox
-const myBox = eBox.createBox({
+const myBox = new eBox.createBox({
   size: [800, 200],
   position: [960, 540],
   anchor: 'center',
