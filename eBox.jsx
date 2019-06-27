@@ -1,5 +1,6 @@
 {
-  "createBox": function(layer, boxProps = {}) {
+  "createBox": function(boxProps = {}, layer = thisLayer) {
+
     const positionToCenter = (position, size, anchor) => {
       return {
         'center': position,
@@ -22,31 +23,51 @@
     const pointsToComp = points => points.map(point => layer.toComp(point));
     const pointsToPath = (points, isClosed) => layer.createPath(points, 0, 0, isClosed);
 
-    function createPathFromBoxProps(boxProps) {
+    function createPointsFromBoxProps(boxProps) {
       const points = sizeToPoints(boxProps.size);
       const centeredPoints = movePoints(points, boxProps.centerPosition);
       const compPositionPoints = pointsToComp(centeredPoints);
-      const boxPath = pointsToPath(compPositionPoints, box.isClosed);
 
-      return boxPath;
+      return compPositionPoints;
     }
 
-    function scaleBox(boxProps, scale = [100, 100], anchor) {
-      const scaledSize = [boxProps.size[0] * scale[0], boxProps.scale * scale[1]];
-      return {
-        ...boxProps,
-        size: scaledSize,
+    function scalePoints(scale = [100, 100], anchor) {
+      
+      // Set anchor corner as [0, 0] for easy scaling
+      const pointsToCorner = (anchor) => {
+        // Get a center position that would zero out the corner
+        const centeredPosition = positionToCenter([0,0], this.size, anchor);
+        // Return points at that position
+        return movePoints(this.points, centeredPosition);
+      }
+
+      // Points moved to [0, 0]
+      const anchoredPoints = pointsToCorner(anchor);
+
+      // Points scaled 
+      const scaledPoints = [
+          [anchoredPoints[0][0] * p1XScale, anchoredPoints[0][1] * point1YScale],
+          [anchoredPoints[1][0] * p2XScale, anchoredPoints[1][1] * point2YScale],
+          [anchoredPoints[2][0] * p3XScale, anchoredPoints[2][1] * point3YScale],
+          [anchoredPoints[3][0] * p4XScale, anchoredPoints[4][1] * point4YScale]
+        ];
+      
+
       }
     }
 
-    const box = {
-      size: [500, 500],
-      position: [960, 540],
-      anchor: 'bottomLeft',
-      isClosed: true,
-    }
+    // Destructuring boxProps, with defaults
+    const {
+      size = [800, 200],
+      position = [960, 540],
+      anchor = 'center',
+      isClosed = true,
+    } = boxProps;
 
-    box.centerPosition = positionToCenter(box.position, box.size, box.anchor);
-    box.path = createPathFromBoxProps(box);
+    const centerPosition = positionToCenter(box.position, box.size, box.anchor);
+
+    this.points = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
+    this.setScale = scalePoints();
+    this.show = pointsToPath(this.points, isClosed);
   }
 }
