@@ -1,6 +1,8 @@
 {
   "createBox": function(boxProps = {}, layer = thisLayer) {
 
+    const pointOrder = ['topLeft', 'topRight', 'bottomRight', 'bottomLeft'];
+
     const positionToCenter = (position, size, anchor) => {
       return {
         'center': position,
@@ -32,28 +34,36 @@
     }
 
     function scalePoints(scale = [100, 100], anchor) {
-      
-      // Set anchor corner as [0, 0] for easy scaling
-      const pointsToCorner = (anchor) => {
-        // Get a center position that would zero out the corner
-        const centeredPosition = positionToCenter([0,0], this.size, anchor);
-        // Return points at that position
-        return movePoints(this.points, centeredPosition);
-      }
 
-      // Points moved to [0, 0]
-      const anchoredPoints = pointsToCorner(anchor);
+      // Remap scale to [0..1]
+      const normalizedScale = scale.map(scale => scale / 100);
+      // Set which point won't be scaled
+      const staticPointNum = pointOrder.indexOf[anchor];
+      // Calculate distance from anchor point
+      const pointDeltas;
 
-      // Points scaled 
-      const scaledPoints = [
-          [anchoredPoints[0][0] * p1XScale, anchoredPoints[0][1] * point1YScale],
-          [anchoredPoints[1][0] * p2XScale, anchoredPoints[1][1] * point2YScale],
-          [anchoredPoints[2][0] * p3XScale, anchoredPoints[2][1] * point3YScale],
-          [anchoredPoints[3][0] * p4XScale, anchoredPoints[4][1] * point4YScale]
-        ];
-      
+      const pointScales = [
+        [1, 1],
+        [1, 1],
+        [1, 1],
+        [1, 1],
+      ];
 
-      }
+      // Scale the point deltas according to input scale
+      const scaledPointDeltas;
+
+      // Get final points by adding scaled deltas to anchor point
+
+      // Return points multiplied by relevant pointScale
+      this.points = this.points.map(
+        (point, pointIndex) => {
+          return point.map(
+            (pointDimension, pointDimensionIndex) => {
+              return pointDimension * pointScales[pointIndex][pointDimensionIndex];
+            }
+          )
+        }
+      );
     }
 
     // Destructuring boxProps, with defaults
