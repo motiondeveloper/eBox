@@ -1,16 +1,19 @@
 {
-  "createBox": function(boxProps = {}, layer = thisLayer) {
+  "createBox": function(boxProps = {}, layer = thisLayer, property = thisProperty) {
 
     const pointOrder = ['topLeft', 'topRight', 'bottomRight', 'bottomLeft'];
 
     const positionToCenter = (position, size, anchor) => {
-      return {
-        'center': position,
-        'topLeft': position + [size[0]/2, size[1]/2],
-        'topRight': position + [-size[0]/2, size[1]/2],
-        'bottomLeft': position + [size[0]/2, -size[1]/2],
-        'bottomRight': position + [-size[0]/2, -size[1]/2],
-      }[anchor];        
+
+      const positionCalculations = {
+        'center': () => position,
+        'topLeft': () => [position[0] + size[0]/2, position[1] + size[1]/2],
+        'topRight': () => [position[0] -size[0]/2, position[1] + size[1]/2],
+        'bottomLeft': () => [position[0] + size[0]/2, position[1] - size[1]/2],
+        'bottomRight': () => [position[0] - size[0]/2, position[1] - size[1]/2],
+      }
+
+      return positionCalculations[anchor]();
     }
 
     const sizeToPoints = (size) => {
@@ -21,13 +24,27 @@
         [-size[0]/2, size[1]/2]
       ];
     }
-    const movePoints = (points, position) => points.map(point => point + position);
+    const movePoints = (points, oldPosition, newPosition) => {
+      const positionDelta = newPosition.map((dimension, dimensionIndex) => {
+        return dimension - oldPosition[dimensionIndex];
+      });
+
+      return points.map(
+        (point) => {
+          return point.map(
+            (dimension, dimensionIndex) => {
+              return dimension + positionDelta[dimensionIndex];
+          });
+        }
+      );
+    };
+    
     const pointsToComp = points => points.map(point => layer.toComp(point));
-    const pointsToPath = (points, isClosed) => layer.createPath(points, 0, 0, isClosed);
+    const pointsToPath = (points, isClosed) => property.createPath(points, [], [], isClosed);
 
     function createPointsFromBoxProps(boxProps) {
       const points = sizeToPoints(boxProps.size);
-      const centeredPoints = movePoints(points, boxProps.centerPosition);
+      const centeredPoints = movePoints(points, [0, 0], boxProps.centerPosition);
       const compPositionPoints = pointsToComp(centeredPoints);
 
       return compPositionPoints;
@@ -88,14 +105,14 @@
     const {
       size = [800, 200],
       position = [960, 540],
-      anchor = 'center',
+      anchor = 'bottomRight',
       isClosed = true,
     } = boxProps;
 
     const centerPosition = positionToCenter(position, size, anchor);
 
     this.points = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
-    this.setScale = scalePoints();
+    this.setScale = scalePoints;
     this.show = pointsToPath(this.points, isClosed);
   }
 }
