@@ -99,7 +99,7 @@ myBox.setScale([scaleIn, 100], 'topLeft');
 myBox.setScale([scaleOut, 100], 'topRight');
 
 // Return the box path
-myBox.show;
+myBox.path;
 ```
 
 [Back To Top ↑]

@@ -113,6 +113,6 @@
 
     this.points = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
     this.setScale = scalePoints;
-    this.show = pointsToPath(this.points, isClosed);
+    this.path = pointsToPath(this.points, isClosed);
   }
 }
