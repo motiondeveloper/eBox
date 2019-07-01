@@ -65,7 +65,7 @@ myBox.getPath();
 
 3. **Create an eBox**
 
-    This creates a rectangle, with a set of controls for modifying it.
+    You then call the `.createBox()` function, passing it an object containing the properties for box.
 
     ```javascript
     const myBox = eBox.createBox({
@@ -75,6 +75,26 @@ myBox.getPath();
         isClosed: true,
     });
     ```
+
+    <details><summary><strong>Box Object Properties</strong></summary>
+    <br>
+
+    - **`size`:** The size of the box, in pixels
+    - Type: `array`
+    - Required: `true`
+    - **`position`:** The position of the box in the composition
+    - Type: `array`
+    - Required: `true`
+    - **`anchor`:** The anchor point that will be at the given `position`
+    - Type: `string`
+    - Options: `topLeft, topRight, bottomLeft, bottomRight, center`
+    - Required: `true`
+    - **`isClosed`:** Whether the path is closed
+    - Type: `boolean`
+    - Required: `false`
+    - Default: `true`
+    </details>
+    <br>
 
 4. **Set the scale**
 
@@ -86,8 +106,19 @@ myBox.getPath();
     myBox.setScale(scale, anchorPoint);
     ```
 
-    - scale: `[0...100, 0...100]`
-    - anchorPoint: ``
+    <details><summary><strong>Set Scale Parameters</strong></summary>
+    <br>
+
+    - **`scale`:** Scale of the box
+    - Type: `array`
+    - Range: `[0..100, 0..100]`
+    - Required: `true`
+    - **`anchor`:** The anchor point that will be at the given `position`
+    - Type: `string`
+    - Options: `topLeft, topRight, bottomLeft, bottomRight, center`
+    - Required: `true`
+    </details>
+    <br>
 
 5. **Show the box**
 
