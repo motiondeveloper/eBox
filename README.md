@@ -68,10 +68,10 @@ You can animate each of the box properties with the expression animation tool, *
 
 5. **Show the box**
 
-    This returns the path for the box:
+    This function returns the path for the box:
 
     ```javascript
-    eBoxName.path;
+    eBoxName.getPath();
     ````
 
 [Back To Top ↑]
@@ -99,7 +99,7 @@ myBox.setScale([scaleIn, 100], 'topLeft');
 myBox.setScale([scaleOut, 100], 'topRight');
 
 // Return the box path
-myBox.path;
+myBox.getPath();
 ```
 
 [Back To Top ↑]
