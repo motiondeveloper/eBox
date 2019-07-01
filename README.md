@@ -51,7 +51,7 @@ You can animate each of the box properties with the expression animation tool, *
 
 4. **Set the scale**
 
-    > This step is optional, you can call `myBox.show()` without applying any scaling
+    > This step is optional, you can call `myBox.getPath()` without applying any scaling
 
     Scale the box, from the center or a corner:
 
