@@ -110,13 +110,13 @@ myBox.getPath();
     <br>
 
     - **`scale`:** Scale of the box
-    - Type: `array`
-    - Range: `[0..100, 0..100]`
-    - Required: `true`
+      - Type: `array`
+      - Range: `[0..100, 0..100]`
+      - Required: `true`
     - **`anchor`:** The anchor point that will be at the given `position`
-    - Type: `string`
-    - Options: `topLeft, topRight, bottomLeft, bottomRight, center`
-    - Required: `true`
+      - Type: `string`
+      - Options: `topLeft, topRight, bottomLeft, bottomRight, center`
+      - Required: `true`
     </details>
     <br>
 
