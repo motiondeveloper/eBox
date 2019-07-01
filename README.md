@@ -30,7 +30,6 @@ const myBox = eBox.createBox({
   size: [800, 200],
   position: [960, 540],
   anchor: 'center',
-  isClosed: true,
 });
 
 // Scale the box in from the left
