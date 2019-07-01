@@ -12,10 +12,38 @@ You can animate each of the box properties with the expression animation tool, *
 
 ## Contents <!-- omit in toc -->
 
-- [Usage](#Usage)
 - [Example](#Example)
+- [Usage](#Usage)
 - [License](#License)
 - [Contact](#Contact)
+
+## Example
+
+An example setup of an eBox setup:
+
+```javascript
+// Import eBox library
+const eBox = footage("eBox.jsx").sourceData;
+
+// Create new eBox
+const myBox = eBox.createBox({
+  size: [800, 200],
+  position: [960, 540],
+  anchor: 'center',
+  isClosed: true,
+});
+
+// Scale the box in from the left
+myBox.setScale([scaleIn, 100], 'topLeft');
+
+// Scale the box off from the right
+myBox.setScale([scaleOut, 100], 'topRight');
+
+// Return the box path
+myBox.getPath();
+```
+
+[Back To Top ↑]
 
 ## Usage
 
@@ -69,34 +97,6 @@ You can animate each of the box properties with the expression animation tool, *
     ```javascript
     eBoxName.getPath();
     ````
-
-[Back To Top ↑]
-
-## Example
-
-An example setup of an eBox setup:
-
-```javascript
-// Import eBox library
-const eBox = footage("eBox.jsx").sourceData;
-
-// Create new eBox
-const myBox = eBox.createBox({
-  size: [800, 200],
-  position: [960, 540],
-  anchor: 'center',
-  isClosed: true,
-});
-
-// Scale the box in from the left
-myBox.setScale([scaleIn, 100], 'topLeft');
-
-// Scale the box off from the right
-myBox.setScale([scaleOut, 100], 'topRight');
-
-// Return the box path
-myBox.getPath();
-```
 
 [Back To Top ↑]
 
