@@ -36,7 +36,7 @@ const myBox = eBox.createBox({
 myBox.setScale([scaleIn, 100], 'topLeft');
 
 // Scale the box off from the right
-myBox.setScale([scaleOut, 100], 'topRight');
+myBox.setScale([scaleOut, 100], 'bottomRight');
 
 // Return the box path
 myBox.getPath();
