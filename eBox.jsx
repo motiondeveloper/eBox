@@ -50,6 +50,20 @@
       return compPositionPoints;
     }
 
+    // Destructuring boxProps, with defaults
+    const {
+      size = [800, 200],
+      position = [960, 540],
+      anchor = 'bottomRight',
+      isClosed = true,
+    } = boxProps;
+
+    const centerPosition = positionToCenter(position, size, anchor);
+
+    let boxPoints = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
+
+    const getBoxPath = () => { return pointsToPath(boxPoints, isClosed) };
+
     const scalePoints = function (scale = [100, 100], anchor) {
 
       // Remap scale to [0..1]
@@ -57,10 +71,10 @@
       
       // Get index of anchor point
       const anchorPointIndex = pointOrder.indexOf(anchor);
-      const anchorPoint = this.boxPoints[anchorPointIndex];
+      const anchorPoint = boxPoints[anchorPointIndex];
       
       // Calculate distance from anchor point
-      const pointDeltas = this.boxPoints.map(
+      const pointDeltas = boxPoints.map(
         (point) => {
           return point.map(
             (dimension, dimensionIndex) => {
@@ -80,9 +94,8 @@
           );
         }
       );
-      // Get final points by adding scaled deltas to anchor point
-      // THIS DOESN'T WORK????
-      this.boxPoints = this.boxPoints.map(
+
+      const scaledPoints = boxPoints.map(
 
         (point, pointIndex) => {
 
@@ -101,23 +114,13 @@
           }
         }
       );
+
+      boxPoints = scaledPoints;
     }
-
-    // Destructuring boxProps, with defaults
-    const {
-      size = [800, 200],
-      position = [960, 540],
-      anchor = 'bottomRight',
-      isClosed = true,
-    } = boxProps;
-
-    const centerPosition = positionToCenter(position, size, anchor);
-
-    this.boxPoints = createPointsFromBoxProps({size, position, anchor, isClosed, centerPosition});
     
     return {
       setScale: scalePoints,
-      path: pointsToPath(this.boxPoints, isClosed),
+      getPath: getBoxPath,
     }
   }
 }
