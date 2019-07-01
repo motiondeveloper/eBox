@@ -80,19 +80,19 @@ myBox.getPath();
     <br>
 
     - **`size`:** The size of the box, in pixels
-    - Type: `array`
-    - Required: `true`
-    - **`position`:** The position of the box in the composition
-    - Type: `array`
-    - Required: `true`
+      - Type: `array`
+      - Required: `true`
+      - **`position`:** The position of the box in the composition
+      - Type: `array`
+      - Required: `true`
     - **`anchor`:** The anchor point that will be at the given `position`
-    - Type: `string`
-    - Options: `topLeft, topRight, bottomLeft, bottomRight, center`
-    - Required: `true`
+      - Type: `string`
+      - Options: `topLeft, topRight, bottomLeft, bottomRight, center`
+      - Required: `true`
     - **`isClosed`:** Whether the path is closed
-    - Type: `boolean`
-    - Required: `false`
-    - Default: `true`
+      - Type: `boolean`
+      - Required: `false`
+      - Default: `true`
     </details>
     <br>
 
