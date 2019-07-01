@@ -10,10 +10,6 @@ The benefit of using eBox is being able to easily create and scale boxes in expr
 
 You can animate each of the box properties with the expression animation tool, **[`eKeys 🔑`](https://github.com/motiondeveloper/ekeys)**.
 
-> ⚠️ **eBox is still under heavy development!**
-> 
-> It's not recommended that you start using eBox in production yet as it's still broken and buggy 🐛.
-
 ## Contents <!-- omit in toc -->
 
 - [Usage](#Usage)
