@@ -1,4 +1,4 @@
-import { Path } from "typescript";
+/// <reference path="./index.d.ts" />
 
 // Global objects, attributes, and methods
 export const PathBase: PathValue = {};
@@ -6,7 +6,34 @@ export const KeyBase: Key = {
   value: "key value",
   time: 0,
 };
-export const PropertyGroupBase = {};
+export const PointsBase: Vector2D[] = [
+  [0, 0],
+  [100, 0],
+  [100, 100],
+  [0, 100],
+];
+
+export const CompBase: Comp = {
+  name: "Comp Base",
+  numLayers: 1,
+  activeCamera: null,
+  width: 1920,
+  height: 1080,
+  duration: 10,
+  ntscDropFrame: false,
+  displayStartTime: 0,
+  frameDuration: 0.04,
+  frameRate: 25,
+  shutterAngle: 180,
+  bgColor: [1, 1, 1, 1],
+  pixelAspect: 1,
+  layer: (indexOrOtherLayer, relIndex) => LayerBase,
+};
+
+export const PropertyGroupBase: PropertyGroup = {
+  name: "property group base",
+};
+export const ValueBase = 1;
 export const PropertyBase: PathProperty = {
   value: "property base string value",
   name: "property name",
@@ -14,21 +41,106 @@ export const PropertyBase: PathProperty = {
   speed: 0,
   numKeys: 0,
   propertyIndex: 1,
-  valueAtTime: (time) => this.value,
-  velocityAtTime: (time) => this.velocity,
-  speedAtTime: (time) => this.speed,
-  wiggle: (freq, amp, octaves = 1, amp_mult = 0.5, t = time) => this.value,
+  valueAtTime: (time) => ValueBase,
+  velocityAtTime: (time) => 0,
+  speedAtTime: (time) => 0,
+  wiggle: (freq, amp, octaves = 1, amp_mult = 0.5, t = time) => ValueBase,
   temporalWiggle: (freq, amp, octaves = 1, amp_mult = 0.5, t = time) =>
-    this.value,
-  smooth: (width = 0.2, samples = 5, t = time) => this.value,
-  loopIn: (type = "cycle", numKeyframes = 0) => this.value,
-  loopOut: (type = "cycle", numKeyframes = 0) => this.value,
-  loopInDuration: (type = "cycle", duration = 0) => this.value,
-  loopOutDuration: (type = "cycle", duration = 0) => this.value,
+    ValueBase,
+  smooth: (width = 0.2, samples = 5, t = time) => ValueBase,
+  loopIn: (type = "cycle", numKeyframes = 0) => ValueBase,
+  loopOut: (type = "cycle", numKeyframes = 0) => ValueBase,
+  loopInDuration: (type = "cycle", duration = 0) => ValueBase,
+  loopOutDuration: (type = "cycle", duration = 0) => ValueBase,
   createPath: (points, inTangents = [], outTangent = [], isClosed = true) =>
     PathBase,
   key: (indexOrName) => KeyBase,
   propertyGroup: (countUp = 1) => PropertyGroupBase,
+  points: (t = time) => PointsBase,
+  inTangents: (t = time) => PointsBase,
+  outTangents: (t = time) => PointsBase,
+  isClosed: () => true,
+  pointOnPath: (percentage = 0.5, t = time) => [0, 0],
+  tangentOnPath: (percentage = 0.5, t = time) => [0, 0],
+  normalOnPath: (percentage = 0.5, t = time) => [0, 0],
+};
+
+const TransformBase: Transform = {
+  name: "Transform",
+  anchorPoint: PropertyBase,
+  position: PropertyBase,
+  scale: PropertyBase,
+  rotation: PropertyBase,
+  orientation: PropertyBase,
+  rotationX: PropertyBase,
+};
+
+const MaterialBase: MaterialOptions = {
+  name: "Material Property Group",
+  lightTransmission: PropertyBase,
+  castShadows: PropertyBase,
+  acceptsShadows: PropertyBase,
+  acceptsLights: PropertyBase,
+  ambient: PropertyBase,
+  diffuse: PropertyBase,
+  specular: PropertyBase,
+  shininess: PropertyBase,
+  metal: PropertyBase,
+};
+
+export const SourceRectBase: SourceRect = {
+  top: 0,
+  left: 0,
+  width: 100,
+  height: 100,
+};
+
+export const EffectBase: Effect = {
+  active: true,
+  param: (nameOrIndex) => PropertyBase,
+};
+
+export const MaskBase: Mask = {
+  maskOpacity: PropertyBase,
+  maskExpansion: PropertyBase,
+  maskFeather: PropertyBase,
+  invert: false,
+};
+
+export const LayerBase: Layer = {
+  name: "layer base",
+  source: CompBase,
+  width: 1920,
+  height: 1080,
+  index: 0,
+  hasParent: false,
+  inPoint: 0,
+  outPoint: 1,
+  startTime: 0,
+  hasVideo: false,
+  hasAudio: false,
+  active: true,
+  enabled: true,
+  transform: TransformBase,
+  materialOption: MaterialBase,
+  toComp: (vec, t = time) => [0, 0, 0],
+  fromComp: (vec, t = time) => [0, 0, 0],
+  toWorld: (vec, t = time) => [0, 0, 0],
+  toCompVec: (vec, t = time) => [0, 0, 0],
+  fromCompVec: (vec, t = time) => [0, 0, 0],
+  toWorldVec: (vec, t = time) => [0, 0, 0],
+  fromWorldVec: (vec, t = time) => [0, 0, 0],
+  fromCompToSurface: (vec) => [0, 0, 0],
+  sourceTime: (t = time) => 0,
+  sourceRectAtTime: (t = time, includeExtents = false) => SourceRectBase,
+  effect: (nameOrIndex) => EffectBase,
+  mask: (nameOrIndex) => MaskBase,
+  sampleImage: (
+    point,
+    radius = [0.5, 0.5],
+    postEffect?: boolean,
+    time?: number
+  ) => [1, 1, 1, 1],
 };
 
 export const layer = CompBase.layer;
@@ -39,7 +151,22 @@ export function comp(index: number | string) {
 export const time: number = 0;
 export const colorDepth: number = 8;
 
-export function footage(name: string): Footage {}
+const FootageBase: Footage = {
+  name: "Footage Item",
+  width: 1920,
+  height: 1080,
+  duration: 10,
+  frameDuration: 0.04,
+  ntscDropFrame: false,
+  pixelAspect: 1,
+  sourceText: "Source text",
+  sourceData: ["Source data"] as SourceData,
+  dataValue: (dataPath: []) => "data value",
+};
+
+export function footage(name: string): Footage {
+  return FootageBase;
+}
 
 // Time conversion methods
 

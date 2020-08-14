@@ -3,6 +3,7 @@ declare type Vector = [number, number, number?];
 declare type Vector2D = [number, number];
 declare type Vector3D = [number, number, number];
 declare type Color = [number, number, number, number];
+declare interface PathValue {}
 declare type Value =
   | number
   | Vector
@@ -63,8 +64,6 @@ declare interface PathProperty extends Property {
   normalOnPath(percentage?: number, time?: number): Vector2D;
 }
 
-declare interface PathValue {}
-
 declare interface PropertyGroup {
   readonly name: string;
 }
@@ -75,7 +74,7 @@ declare interface Layer {
   readonly width: number;
   readonly height: number;
   readonly index: number;
-  readonly parent: Layer | Light | Camera;
+  readonly parent?: Layer | Light | Camera;
   readonly hasParent: boolean;
   readonly inPoint: number;
   readonly outPoint: number;
@@ -98,8 +97,8 @@ declare interface Layer {
   toWorldVec(vec: Vector, time?: number): Vector;
   fromWorldVec(vec: Vector, time?: number): Vector;
   fromCompToSurface(vec: Vector): Vector;
-  sourceTime?(time: number): number;
-  sourceRectAtTime(time: number, includeExtents: boolean): SourceRect;
+  sourceTime?(time?: number): number;
+  sourceRectAtTime(time?: number, includeExtents?: boolean): SourceRect;
   effect(nameOrIndex: number | string): Effect;
   mask(nameOrIndex: number | string): Mask;
   sampleImage(
@@ -113,7 +112,7 @@ declare interface Layer {
 declare interface Comp {
   readonly name: string;
   readonly numLayers: number;
-  readonly activeCamera: Camera;
+  readonly activeCamera: Camera | null;
   readonly width: number;
   readonly height: number;
   readonly duration: number;

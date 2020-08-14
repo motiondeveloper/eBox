@@ -1,25 +1,25 @@
-import { thisLayer, thisProperty } from "./expression-globals";
+import { LayerBase, PropertyBase, CompBase } from "./expression-globals";
 
-type Point = [number, number];
-type Points = [Point, Point, Point, Point];
+// Creating layer and property mocks
+const thisLayer = Object.create(LayerBase);
+const thisProperty = Object.create(PropertyBase);
+
+// eBox types
+type Points = [Vector2D, Vector2D, Vector2D, Vector2D];
 type Anchor = "topLeft" | "topRight" | "bottomRight" | "bottomLeft" | "center";
 interface BoxProps {
-  size: Point;
-  position: Point;
+  size: Vector2D;
+  position: Vector2D;
   anchor: Anchor;
   isClosed: boolean;
 }
 
-function createBox(
-  {
-    size = [100, 100],
-    position = [0, 0],
-    anchor = "center",
-    isClosed = true,
-  }: BoxProps,
-  layer: Layer = thisLayer,
-  property: Property = thisProperty
-) {
+function createBox({
+  size = [100, 100],
+  position = [0, 0],
+  anchor = "center",
+  isClosed = true,
+}: BoxProps) {
   const pointOrder: Anchor[] = [
     "topLeft",
     "topRight",
@@ -28,25 +28,25 @@ function createBox(
   ];
 
   function positionToCenter(
-    position: Point,
-    size: Point,
+    position: Vector2D,
+    size: Vector2D,
     anchor: Anchor
-  ): Point {
+  ): Vector2D {
     const positionCalculations = {
-      center: (): Point => position,
-      topLeft: (): Point => [
+      center: (): Vector2D => position,
+      topLeft: (): Vector2D => [
         position[0] + size[0] / 2,
         position[1] + size[1] / 2,
       ],
-      topRight: (): Point => [
+      topRight: (): Vector2D => [
         position[0] - size[0] / 2,
         position[1] + size[1] / 2,
       ],
-      bottomLeft: (): Point => [
+      bottomLeft: (): Vector2D => [
         position[0] + size[0] / 2,
         position[1] - size[1] / 2,
       ],
-      bottomRight: (): Point => [
+      bottomRight: (): Vector2D => [
         position[0] - size[0] / 2,
         position[1] - size[1] / 2,
       ],
@@ -55,7 +55,7 @@ function createBox(
     return positionCalculations[anchor]();
   }
 
-  function sizeToPoints(size: Point): Points {
+  function sizeToPoints(size: Vector2D): Points {
     return [
       [-size[0] / 2, -size[1] / 2],
       [size[0] / 2, -size[1] / 2],
@@ -65,36 +65,36 @@ function createBox(
   }
   function movePoints(
     points: Points,
-    oldPosition: Point,
-    newPosition: Point
+    oldPosition: Vector2D,
+    newPosition: Vector2D
   ): Points {
-    const positionDelta: Point = newPosition.map(
+    const positionDelta: Vector2D = newPosition.map(
       (dimension, dimensionIndex): number => {
         return dimension - oldPosition[dimensionIndex];
       }
-    ) as Point;
+    ) as Vector2D;
 
     return points.map(
-      (point: Point): Point => {
+      (point: Vector2D): Vector2D => {
         return point.map((dimension, dimensionIndex) => {
           return dimension + positionDelta[dimensionIndex];
-        }) as Point;
+        }) as Vector2D;
       }
     ) as Points;
   }
 
   function pointsToComp(points: Points): Points {
     return points.map(
-      (point): Point => layer.fromCompToSurface(point)
+      (point): Vector2D => thisLayer.fromCompToSurface(point) as Vector2D
     ) as Points;
   }
   function pointsToPath(points: Points, isClosed: boolean) {
-    property.createPath(points, [], [], isClosed);
+    thisProperty.createPath(points, [], [], isClosed);
   }
 
   const centerPosition = positionToCenter(position, size, anchor);
   interface OutputBox extends BoxProps {
-    centerPosition: Point;
+    centerPosition: Vector2D;
   }
   let boxPoints: Points = createPointsFromBoxProps({
     size,
@@ -115,32 +115,34 @@ function createBox(
     return compPositionPoints;
   }
 
-  function scalePoints(scale: Point = [100, 100], anchor: Anchor): void {
+  function scalePoints(scale: Vector2D = [100, 100], anchor: Anchor): void {
     // Remap scale to [0..1]
-    const normalizedScale: Point = scale.map((scale) => scale / 100) as Point;
+    const normalizedScale: Vector2D = scale.map(
+      (scale) => scale / 100
+    ) as Vector2D;
 
     // Get index of anchor point
     const anchorPointIndex: number = pointOrder.indexOf(anchor);
-    const anchorPoint: Point = boxPoints[anchorPointIndex];
+    const anchorPoint: Vector2D = boxPoints[anchorPointIndex];
 
     // Calculate distance from anchor point
     const pointDeltas: Points = boxPoints.map((point) => {
       return point.map((dimension, dimensionIndex): number => {
         return dimension - anchorPoint[dimensionIndex];
-      }) as Point;
+      }) as Vector2D;
     }) as Points;
 
     // Scale the point deltas according to input scale
     const scaledPointDeltas: Points = pointDeltas.map(
-      (point): Point => {
+      (point): Vector2D => {
         return point.map((dimension, dimensionIndex): number => {
           return dimension * normalizedScale[dimensionIndex];
-        }) as Point;
+        }) as Vector2D;
       }
     ) as Points;
 
     const scaledPoints: Points = boxPoints.map(
-      (point, pointIndex): Point => {
+      (point, pointIndex): Vector2D => {
         if (pointIndex !== anchorPointIndex) {
           // If not the anchor point
           // Create the point from the scaledPointDelta
@@ -149,7 +151,7 @@ function createBox(
               anchorPoint[dimensionIndex] +
               scaledPointDeltas[pointIndex][dimensionIndex]
             );
-          }) as Point;
+          }) as Vector2D;
         } else {
           // If the anchor point
           // Return as is
