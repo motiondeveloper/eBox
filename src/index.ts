@@ -1,12 +1,16 @@
-import { LayerBase, PropertyBase, CompBase } from "./expression-globals";
+import {
+  LayerBase,
+  PropertyBase,
+  Vector2D,
+  Points,
+} from 'expression-globals-typescript';
 
 // Creating layer and property mocks
 const thisLayer = Object.create(LayerBase);
 const thisProperty = Object.create(PropertyBase);
 
 // eBox types
-type Points = [Vector2D, Vector2D, Vector2D, Vector2D];
-type Anchor = "topLeft" | "topRight" | "bottomRight" | "bottomLeft" | "center";
+type Anchor = 'topLeft' | 'topRight' | 'bottomRight' | 'bottomLeft' | 'center';
 interface BoxProps {
   size: Vector2D;
   position: Vector2D;
@@ -17,14 +21,14 @@ interface BoxProps {
 function createBox({
   size = [100, 100],
   position = [0, 0],
-  anchor = "center",
+  anchor = 'center',
   isClosed = true,
 }: BoxProps) {
   const pointOrder: Anchor[] = [
-    "topLeft",
-    "topRight",
-    "bottomRight",
-    "bottomLeft",
+    'topLeft',
+    'topRight',
+    'bottomRight',
+    'bottomLeft',
   ];
 
   function positionToCenter(
@@ -89,7 +93,7 @@ function createBox({
     ) as Points;
   }
   function pointsToPath(points: Points, isClosed: boolean) {
-    thisProperty.createPath(points, [], [], isClosed);
+    return thisProperty.createPath(points, [], [], isClosed);
   }
 
   const centerPosition = positionToCenter(position, size, anchor);
@@ -118,7 +122,7 @@ function createBox({
   function scalePoints(scale: Vector2D = [100, 100], anchor: Anchor): void {
     // Remap scale to [0..1]
     const normalizedScale: Vector2D = scale.map(
-      (scale) => scale / 100
+      scale => scale / 100
     ) as Vector2D;
 
     // Get index of anchor point
@@ -126,7 +130,7 @@ function createBox({
     const anchorPoint: Vector2D = boxPoints[anchorPointIndex];
 
     // Calculate distance from anchor point
-    const pointDeltas: Points = boxPoints.map((point) => {
+    const pointDeltas: Points = boxPoints.map(point => {
       return point.map((dimension, dimensionIndex): number => {
         return dimension - anchorPoint[dimensionIndex];
       }) as Vector2D;
