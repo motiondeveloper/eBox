@@ -1,20 +1,20 @@
-import typescript from "@rollup/plugin-typescript";
-import afterEffectJsx from "rollup-plugin-ae-jsx";
+import typescript from '@rollup/plugin-typescript';
+import afterEffectJsx from 'rollup-plugin-ae-jsx';
 
 export default {
-  input: "src/index.ts",
+  input: 'src/index.ts',
   output: {
-    file: "dist/eBox.jsx",
-    format: "cjs",
+    file: 'dist/eBox.jsx',
+    format: 'cjs',
   },
   plugins: [
     typescript({
-      module: "esnext",
-      target: "esnext",
+      module: 'esnext',
+      target: 'esnext',
       noImplicitAny: true,
-      moduleResolution: "node",
+      moduleResolution: 'node',
       strict: true,
-      lib: ["esnext"],
+      lib: ['esnext'],
     }),
     afterEffectJsx(),
   ],
