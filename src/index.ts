@@ -1,13 +1,14 @@
 import {
-  LayerBase,
-  PropertyBase,
+  Layer,
+  PathProperty,
   Vector2D,
   Points,
+  PathValue,
 } from 'expression-globals-typescript';
 
 // Creating layer and property mocks
-const thisLayer = Object.create(LayerBase);
-const thisProperty = Object.create(PropertyBase);
+const thisLayer = new Layer();
+const thisProperty = new PathProperty<PathValue>([[0, 0]]);
 
 // eBox types
 type Anchor = 'topLeft' | 'topRight' | 'bottomRight' | 'bottomLeft' | 'center';
