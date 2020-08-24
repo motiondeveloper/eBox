@@ -1,6 +1,22 @@
 [back to top ↑]: #ebox-
 
-# eBox <!-- omit in toc -->
+<div align="center">
+
+# eBox 🏗<!-- omit in toc -->
+
+Create rectangles within After Effects expressions
+
+![header](docs/static/header.svg)
+
+---
+
+### [✨ Download eBox ✨](https://github.com/motiondeveloper/eBox/releases)<!-- omit in toc -->
+
+---
+
+</div>
+
+## Overview
 
 eBox a system for creating rectangles in After Effects with intuitive controls for changing their position, size, and scale.
 
@@ -10,8 +26,11 @@ The benefit of using eBox is being able to easily create and scale boxes in expr
 
 You can animate each of the box properties with the expression animation tool, **[`eKeys 🔑`](https://github.com/motiondeveloper/ekeys)**.
 
+> **eBox is written in TypeScript using our [Expression Library Template](https://github.com/motiondeveloper/expressions-library-template)**
+
 ## Contents <!-- omit in toc -->
 
+- [Overview](#overview)
 - [Example](#example)
 - [Usage](#usage)
 - [License](#license)
