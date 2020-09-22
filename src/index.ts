@@ -174,4 +174,6 @@ function createBox({
   };
 }
 
-export { createBox };
+const version: string = '_npmVersion';
+
+export { createBox, version };
