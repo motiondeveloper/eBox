@@ -1,6 +1,6 @@
 {
   "name": "ebox",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Create rectangles within After Effects expressions ",
   "main": "dist/eBox.jsx",
   "scripts": {
@@ -25,7 +25,7 @@
     "@rollup/plugin-typescript": "^5.0.2",
     "prettier": "^1.16.4",
     "rollup": "^2.28.1",
-    "rollup-plugin-ae-jsx": "^1.1.5",
+    "rollup-plugin-ae-jsx": "^2.0.0",
     "tslib": "^2.0.1",
     "typescript": "^3.9.7"
   },
