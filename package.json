@@ -1,6 +1,6 @@
 {
   "name": "ebox",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Create rectangles within After Effects expressions ",
   "main": "dist/eBox.jsx",
   "scripts": {
@@ -30,6 +30,6 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "expression-globals-typescript": "^2.1.1"
+    "expression-globals-typescript": "^3.0.0"
   }
 }
