@@ -4,11 +4,13 @@ import {
   Vector2D,
   Points,
   PathValue,
+  SourceText,
 } from 'expression-globals-typescript';
 
 // Creating layer and property mocks
 const thisLayer = new Layer();
 const thisProperty = new PathProperty<PathValue>([[0, 0]]);
+const textProperty = new SourceText('string');
 
 // eBox types
 type Anchor = 'topLeft' | 'topRight' | 'bottomRight' | 'bottomLeft' | 'center';
@@ -89,9 +91,7 @@ function createBox({
   }
 
   function pointsToComp(points: Points): Points {
-    return points.map(
-      (point): Vector2D => thisLayer.fromCompToSurface(point) as Vector2D
-    ) as Points;
+    return points.map((point): Vector2D => thisLayer.fromComp(point)) as Points;
   }
   function pointsToPath(points: Points, isClosed: boolean) {
     return thisProperty.createPath(points, [], [], isClosed);
