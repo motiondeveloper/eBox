@@ -10,7 +10,6 @@ import {
 // Creating layer and property mocks
 const thisLayer = new Layer();
 const thisProperty = new PathProperty<PathValue>([[0, 0]]);
-const textProperty = new SourceText('string');
 
 // eBox types
 type Anchor = 'topLeft' | 'topRight' | 'bottomRight' | 'bottomLeft' | 'center';
