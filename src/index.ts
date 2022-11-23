@@ -1,4 +1,9 @@
-import { Layer, PathProperty } from 'expression-globals-typescript';
+import {
+  Layer,
+  PathProperty,
+  Points,
+  Vector2D,
+} from 'expression-globals-typescript';
 
 // Creating layer and property mocks
 const thisLayer = new Layer();
@@ -7,8 +12,6 @@ const thisProperty = new PathProperty([[0, 0]]);
 // eBox types
 type Anchor = 'topLeft' | 'topRight' | 'bottomRight' | 'bottomLeft' | 'center';
 type Rounding = [number, number, number, number];
-type Vector2D = [number, number];
-type Points = Array<Vector2D>;
 
 interface BoxProps {
   size: Vector2D;
@@ -121,7 +124,7 @@ function createBox({
       thisLayer.add(pBl, [0, -rBl]),
     ];
 
-    const inTangents = [
+    const inTangents = ([
       // Top left
       [0, 0],
       [-rTl, 0],
@@ -134,8 +137,9 @@ function createBox({
       // Bottom left
       [0, 0],
       [0, rBl],
-    ].map(p => thisLayer.mul(p, tangentMult));
-    const outTangents = [
+    ] as Vector2D[]).map(p => thisLayer.mul(p, tangentMult));
+
+    const outTangents = ([
       // Top left
       [0, -rTl],
       [0, 0],
@@ -148,7 +152,7 @@ function createBox({
       // Bottom left
       [-rBl, 0],
       [0, 0],
-    ].map(p => thisLayer.mul(p, tangentMult));
+    ] as Vector2D[]).map(p => thisLayer.mul(p, tangentMult));
 
     return thisProperty.createPath(
       cornerPoints,
