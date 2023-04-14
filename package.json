@@ -1,6 +1,6 @@
 {
   "name": "ebox",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Create rectangles within After Effects expressions ",
   "main": "dist/eBox.jsx",
   "scripts": {
