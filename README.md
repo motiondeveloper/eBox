@@ -48,14 +48,15 @@ const eBox = footage('eBox.jsx').sourceData;
 const myBox = eBox.createBox({
   size: [800, 200],
   position: [960, 540],
+  rounding: [12, 12, 12, 12],
   anchor: 'center',
 });
 
 // Scale the box in from the left
-myBox.setScale([scaleIn, 100], 'topLeft');
+myBox.setScale([scaleIn, 100], 'centerLeft');
 
 // Scale the box off from the right
-myBox.setScale([scaleOut, 100], 'bottomRight');
+myBox.setScale([scaleOut, 100], 'centerRight');
 
 // Return the box path
 myBox.getPath();
@@ -107,12 +108,15 @@ myBox.getPath();
      - Required: `true`
    - **`anchor`:** The anchor point that will be at the given `position`
      - Type: `string`
-     - Options: `topLeft, topRight, bottomLeft, bottomRight, center`
+     - Options: `topLeft, topCenter, topRight, bottomLeft, bottomCenter, bottomRight, centerLeft, center, centerRight`
      - Required: `true`
    - **`isClosed`:** Whether the path is closed
      - Type: `boolean`
      - Required: `false`
      - Default: `true`
+   - **`rounding`:** Radius for each corner
+     - Type: `array`
+     - Required : `false`
        </details>
        <br>
 
@@ -135,7 +139,7 @@ myBox.getPath();
      - Required: `true`
    - **`anchor`:** The anchor point that will be at the given `position`
      - Type: `string`
-     - Options: `topLeft, topRight, bottomLeft, bottomRight, center`
+     - Options: `topLeft, topCenter, topRight, bottomLeft, bottomCenter, bottomRight, centerLeft, center, centerRight`
      - Required: `true`
        </details>
        <br>
