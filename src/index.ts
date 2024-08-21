@@ -251,9 +251,9 @@ function createBox({
         position[0] - size[0] / 2,
         position[1] + size[1] / 2,
       ],
-      centerLeft: (): Vector2D => [position[0] + size[1] / 2, position[1]],
+      centerLeft: (): Vector2D => [position[0] + size[0] / 2, position[1]],
       center: (): Vector2D => position,
-      centerRight: (): Vector2D => [position[0] - size[1] / 2, position[1]],
+      centerRight: (): Vector2D => [position[0] - size[0] / 2, position[1]],
       bottomLeft: (): Vector2D => [
         position[0] + size[0] / 2,
         position[1] - size[1] / 2,
